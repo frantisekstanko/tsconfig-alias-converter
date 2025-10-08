@@ -6,14 +6,15 @@ import { FileProcessor } from './FileProcessor.js'
 export class TsconfigAliasConverter {
   static processFiles(
     filePaths: string[],
-    tsconfigPath = './tsconfig.json',
+    tsconfigPath: string,
+    dryRun: boolean,
   ): { modifiedCount: number; totalCount: number } {
     const aliasConfigurations =
       TsconfigReader.readAliasConfigurations(tsconfigPath)
 
     const importRewriter = new ImportRewriter(aliasConfigurations)
 
-    const fileProcessor = new FileProcessor(importRewriter)
+    const fileProcessor = new FileProcessor(importRewriter, dryRun)
 
     let modifiedCount = 0
 
