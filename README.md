@@ -3,6 +3,8 @@
 [![CI](https://github.com/frantisekstanko/tsconfig-alias-converter/actions/workflows/ci.yml/badge.svg)](https://github.com/frantisekstanko/tsconfig-alias-converter/actions/workflows/ci.yml)
 [![npm version](https://img.shields.io/npm/v/@frantisekstanko/tsconfig-alias-converter.svg)](https://www.npmjs.com/package/@frantisekstanko/tsconfig-alias-converter)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![codecov](https://codecov.io/gh/frantisekstanko/tsconfig-alias-converter/branch/main/graph/badge.svg)](https://codecov.io/gh/frantisekstanko/tsconfig-alias-converter)
+[![Bundle Size](https://img.shields.io/bundlephobia/minzip/@frantisekstanko/tsconfig-alias-converter)](https://bundlephobia.com/package/@frantisekstanko/tsconfig-alias-converter)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8-blue.svg)](https://www.typescriptlang.org/)
 
 Convert relative imports to TypeScript path aliases automatically, based on your `tsconfig.json` configuration.
@@ -18,7 +20,7 @@ Convert relative imports to TypeScript path aliases automatically, based on your
 ## Installation
 
 ```bash
-npm install @frantisekstanko/tsconfig-alias-converter
+npm install --save-dev @frantisekstanko/tsconfig-alias-converter
 ```
 
 ## Usage
