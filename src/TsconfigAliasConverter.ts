@@ -6,7 +6,7 @@ import { FileProcessor } from './FileProcessor.js'
 export class TsconfigAliasConverter {
   static processFiles(
     filePaths: string[],
-    tsconfigPath = './tsconfig.json',
+    tsconfigPath: string,
     dryRun: boolean,
   ): { modifiedCount: number; totalCount: number } {
     const aliasConfigurations =
