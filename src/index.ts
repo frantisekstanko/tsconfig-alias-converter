@@ -1,0 +1,5 @@
+export { TsconfigAliasConverter } from './TsconfigAliasConverter.js'
+export { TsconfigReader } from './TsconfigReader.js'
+export { ImportRewriter } from './ImportRewriter.js'
+export { FileProcessor } from './FileProcessor.js'
+export type { AliasConfiguration } from './TsconfigReader.js'

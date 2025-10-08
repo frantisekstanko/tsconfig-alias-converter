@@ -1,0 +1,79 @@
+{
+  "name": "@frantisekstanko/tsconfig-alias-converter",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Convert relative imports to TypeScript path aliases based on tsconfig.json",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "tsconfig-alias-converter": "dist/TsconfigAliasConverterCli.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "!dist/tests",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "tsc --project tsconfig.build.json",
+    "test": "jest --bail",
+    "test:watch": "jest --watchAll",
+    "test:coverage": "jest --coverage",
+    "lint": "eslint . && tsc --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "typescript",
+    "tsconfig",
+    "path-alias",
+    "import",
+    "import-rewrite",
+    "alias",
+    "paths",
+    "relative-imports",
+    "absolute-imports",
+    "code-transformation",
+    "ast",
+    "refactoring",
+    "cli",
+    "esm",
+    "zero-dependencies"
+  ],
+  "author": "Frantisek Stanko",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/frantisekstanko/tsconfig-alias-converter.git"
+  },
+  "bugs": {
+    "url": "https://github.com/frantisekstanko/tsconfig-alias-converter/issues"
+  },
+  "homepage": "https://github.com/frantisekstanko/tsconfig-alias-converter#readme",
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "@types/node": "^24.1.0",
+    "@typescript-eslint/eslint-plugin": "^8.38.0",
+    "@typescript-eslint/parser": "^8.38.0",
+    "eslint": "^9.32.0",
+    "jest": "^30.0.5",
+    "jiti": "^2.6.1",
+    "ts-jest": "^29.4.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.45.0"
+  },
+  "dependencies": {
+    "glob": "^11.0.3"
+  }
+}
