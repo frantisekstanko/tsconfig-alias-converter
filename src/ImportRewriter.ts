@@ -25,7 +25,14 @@ export class ImportRewriter {
     const processedImports: ImportStatement[] = []
 
     for (const { line } of imports) {
-      const parsed = this.parseImportLine(line)
+      let parsed
+
+      try {
+        parsed = this.parseImportLine(line)
+      } catch {
+        processedImports.push({ line, path: '' })
+        continue
+      }
 
       const { prefix, importPath, suffix } = parsed
       const { path: finalPath, wasConverted } = this.convertRelativeToAlias(
@@ -66,24 +73,64 @@ export class ImportRewriter {
 
     const imports: { line: string; startIndex: number; endIndex: number }[] = []
 
-    for (let i = 0; i < lines.length; i++) {
+    let i = 0
+    while (i < lines.length) {
       const line = lines[i]
-      const isImportLine = /^(\s*import\s+.+\s+from\s+['"])(.+)(['"].*)$/.test(
-        line,
-      )
 
-      if (isImportLine) {
+      if (this.isImportStart(line)) {
         if (blockStart === -1) {
           blockStart = i
         }
-        blockEnd = i
-        imports.push({ line, startIndex: i, endIndex: i })
+
+        if (this.isSingleLineImport(line)) {
+          blockEnd = i
+          imports.push({ line, startIndex: i, endIndex: i })
+          i++
+        } else {
+          const result = this.collectMultilineImport(lines, i)
+          blockEnd = result.endIndex
+          imports.push({
+            line: result.fullImport,
+            startIndex: i,
+            endIndex: result.endIndex,
+          })
+          i = result.endIndex + 1
+        }
       } else if (blockStart !== -1 && line.trim() !== '') {
         break
+      } else {
+        i++
       }
     }
 
     return { imports, blockStart, blockEnd }
+  }
+
+  private isImportStart(line: string): boolean {
+    return /^\s*import\s+/.test(line)
+  }
+
+  private isSingleLineImport(line: string): boolean {
+    return /^(\s*import\s+.+\s+from\s+['"])(.+)(['"].*)$/.test(line)
+  }
+
+  private collectMultilineImport(
+    lines: string[],
+    startIndex: number,
+  ): { fullImport: string; endIndex: number } {
+    let fullImport = lines[startIndex]
+    let i = startIndex + 1
+
+    while (i < lines.length) {
+      fullImport += '\n' + lines[i]
+
+      if (/\s+from\s+['"]/.test(lines[i])) {
+        return { fullImport, endIndex: i }
+      }
+      i++
+    }
+
+    return { fullImport, endIndex: i - 1 }
   }
 
   private parseImportLine(line: string): {
@@ -91,10 +138,14 @@ export class ImportRewriter {
     importPath: string
     suffix: string
   } {
-    const regex = /^(\s*import\s+.+\s+from\s+['"])(.+)(['"].*)$/
+    const regex = /^(\s*import\s+[\s\S]+\s+from\s+['"])(.+)(['"].*)$/m
+    const match = regex.exec(line)
 
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const [, prefix, importPath, suffix] = regex.exec(line)!
+    if (!match) {
+      throw new Error('Invalid import')
+    }
+
+    const [, prefix, importPath, suffix] = match
     return { prefix, importPath, suffix }
   }
 

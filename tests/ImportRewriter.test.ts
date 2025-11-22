@@ -101,4 +101,53 @@ describe('ImportRewriter', () => {
     expect(modified).toBe(false)
     expect(content).toBe(fileContent)
   })
+
+  it('should handle multiline imports', () => {
+    const filePath = path.resolve(__dirname, '../src/foo/bar.ts')
+    const fileContent = `import { Foo } from '../domain/Foo.js'
+import {
+  A,
+  B,
+  C,
+} from 'vendor-package'
+import { Bar } from '../application/Bar.js'
+
+const x = 42
+`
+
+    const { modified, content } = importRewriter.rewriteImportsInFile(
+      filePath,
+      fileContent,
+    )
+
+    expect(modified).toBe(true)
+    expect(content).toBe(`import { Foo } from '@/domain/Foo.js'
+import {
+  A,
+  B,
+  C,
+} from 'vendor-package'
+import { Bar } from '@/application/Bar.js'
+
+const x = 42
+`)
+  })
+
+  it('should not modify malformed multiline import without from clause', () => {
+    const filePath = path.resolve(__dirname, '../src/foo/bar.ts')
+    const fileContent = `import {
+  Something
+}
+
+const x = 42
+`
+
+    const { modified, content } = importRewriter.rewriteImportsInFile(
+      filePath,
+      fileContent,
+    )
+
+    expect(modified).toBe(false)
+    expect(content).toBe(fileContent)
+  })
 })
